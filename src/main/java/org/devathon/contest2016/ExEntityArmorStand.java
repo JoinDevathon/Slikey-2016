@@ -11,15 +11,15 @@ public class ExEntityArmorStand extends EntityArmorStand {
 
     private final Runnable runnable;
 
-    public ExEntityArmorStand(World world, double d0, double d1, double d2, Runnable runnable) {
-        super(world, d0, d1, d2);
+    public ExEntityArmorStand(World world, Runnable runnable) {
+        super(world);
         this.runnable = runnable;
     }
 
     @Override
     public void m() {
-        super.m();
         runnable.run();
+        super.m();
     }
 
 }

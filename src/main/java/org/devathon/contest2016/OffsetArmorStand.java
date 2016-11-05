@@ -22,7 +22,10 @@ public class OffsetArmorStand implements Runnable {
     public static OffsetArmorStand spawn(Location location, Supplier<Location> originSupplier, Vector offsetVector) {
         final World world = ((CraftWorld) location.getWorld()).getHandle();
         final OffsetArmorStand offsetArmorStand = new OffsetArmorStand(originSupplier, offsetVector);
-        final ExEntityArmorStand entityArmorStand = new ExEntityArmorStand(world, location.getX(), location.getY(), location.getZ(), offsetArmorStand);
+        final ExEntityArmorStand entityArmorStand = new ExEntityArmorStand(world, offsetArmorStand);
+        entityArmorStand.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        entityArmorStand.setInvisible(true);
+        entityArmorStand.setNoGravity(true);
         offsetArmorStand.entityArmorStand = entityArmorStand;
         ((CraftArmorStand) entityArmorStand.getBukkitEntity()).setHelmet(new ItemStack(Material.IRON_BLOCK));
         world.addEntity(entityArmorStand);

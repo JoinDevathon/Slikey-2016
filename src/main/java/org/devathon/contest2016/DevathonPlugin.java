@@ -11,7 +11,9 @@ public class DevathonPlugin extends JavaPlugin {
         getCommand("blocky").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                OffsetArmorStand.spawn(player.getLocation(), player::getLocation, new Vector(2, 0.5, 0));
+                for (int i = 0; i < 7; i++) {
+                    OffsetArmorStand.spawn(player.getLocation(), player::getLocation, new Vector(i - 3, 0.5, 0));
+                }
             }
             return true;
         });
