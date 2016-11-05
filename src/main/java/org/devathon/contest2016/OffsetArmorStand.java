@@ -3,7 +3,6 @@ package org.devathon.contest2016;
 import net.minecraft.server.v1_10_R1.EntityArmorStand;
 import net.minecraft.server.v1_10_R1.World;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftArmorStand;
 import org.bukkit.inventory.ItemStack;
@@ -19,17 +18,15 @@ import static org.devathon.contest2016.VectorUtils.degToRadians;
  */
 public class OffsetArmorStand implements Runnable {
 
-    public static OffsetArmorStand spawn(Location location, Supplier<Location> originSupplier, Vector offsetVector) {
+    public static OffsetArmorStand spawn(Location location, Supplier<Location> originSupplier, Vector offsetVector, ItemStack itemStack) {
+        offsetVector.multiply(0.6);
         final World world = ((CraftWorld) location.getWorld()).getHandle();
         final OffsetArmorStand offsetArmorStand = new OffsetArmorStand(originSupplier, offsetVector);
         final ExEntityArmorStand entityArmorStand = new ExEntityArmorStand(world, offsetArmorStand);
-        entityArmorStand.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        entityArmorStand.setInvisible(true);
-        entityArmorStand.setNoGravity(true);
+        entityArmorStand.setPosition(location.getX(), location.getY(), location.getZ());
+        ((CraftArmorStand) entityArmorStand.getBukkitEntity()).setHelmet(itemStack);
+        entityArmorStand.world.addEntity(entityArmorStand);
         offsetArmorStand.entityArmorStand = entityArmorStand;
-        ((CraftArmorStand) entityArmorStand.getBukkitEntity()).setHelmet(new ItemStack(Material.IRON_BLOCK));
-        world.addEntity(entityArmorStand);
-        // do some stuff here
         return offsetArmorStand;
     }
 
@@ -46,13 +43,13 @@ public class OffsetArmorStand implements Runnable {
     public void run() {
         final Location origin = originSupplier.get();
         final Vector tmpOffset = offsetVector.clone();
-        VectorUtils.rotate2d(tmpOffset, degToRadians(origin.getYaw()));
+        VectorUtils.rotate2d(tmpOffset, degToRadians(-origin.getYaw()));
 
-        entityArmorStand.setLocation(
+        entityArmorStand.setPositionRotation(
                 origin.getX() + tmpOffset.getX(),
-                origin.getY() + tmpOffset.getY(),
+                origin.getY() + tmpOffset.getY() - 0.5,
                 origin.getZ() + tmpOffset.getZ(),
-                origin.getYaw(), origin.getPitch()
+                origin.getYaw(), 0
         );
     }
 

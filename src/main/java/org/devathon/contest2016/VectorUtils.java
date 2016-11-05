@@ -12,9 +12,11 @@ import static java.lang.Math.sin;
 public class VectorUtils {
 
     public static void rotate2d(Vector v, double yaw) {
-        double x, z ;
-        x = cos(yaw) * v.getX() - sin(yaw) * v.getZ();
-        z = sin(yaw) * v.getX() + cos(yaw) * v.getZ();
+        double x, z, cos, sin;
+        cos = cos(yaw);
+        sin = sin(yaw);
+        x = v.getX() * cos + v.getZ() * sin;
+        z = v.getX() * -sin + v.getZ() * cos;
         v.setX(x).setZ(z);
     }
 
