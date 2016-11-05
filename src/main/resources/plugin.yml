@@ -1,7 +1,13 @@
 name: Devathon Project
 description: A project for the Devathon contest
 version: 1.0.0
-author: Your Name Here
+author: Slikey
 
 main: org.devathon.contest2016.DevathonPlugin
 
+commands:
+    blocky:
+        description: Set yourself on fire
+        aliases: [combust_me, combustMe]
+        permission: inferno.flagrate
+        usage: Syntax error! Simply type /&lt;command&gt; to ignite yourself.
