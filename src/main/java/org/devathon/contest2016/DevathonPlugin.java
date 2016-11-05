@@ -20,6 +20,7 @@ public class DevathonPlugin extends JavaPlugin {
             }
             return true;
         });
+        getServer().getPluginManager().registerEvents(new GunListener(), this);
         // put your enable code here
     }
 
@@ -106,7 +107,16 @@ public class DevathonPlugin extends JavaPlugin {
         OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 3.8, -0.7), energyBlock);
 
         // left arm
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 4, 0), ironBlock);
+        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(2, 4, 0), ironBlock);
+        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(2.5, 4, 0), ironBlock);
+        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(2.5, 4, 1), ironBlock);
+        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(2.5, 4, 2), ironBlock);
+
+        // right arm
+        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-2, 4, 0), ironBlock);
+        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-2.5, 4, 0), ironBlock);
+        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-2.5, 4, 1), ironBlock);
+        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-2.5, 4, 2), ironBlock);
     }
 
 }
