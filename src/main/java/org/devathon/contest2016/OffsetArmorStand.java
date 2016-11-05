@@ -1,6 +1,7 @@
 package org.devathon.contest2016;
 
 import net.minecraft.server.v1_10_R1.EntityArmorStand;
+import net.minecraft.server.v1_10_R1.Vector3f;
 import net.minecraft.server.v1_10_R1.World;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
@@ -33,10 +34,17 @@ public class OffsetArmorStand implements Runnable {
     protected final Supplier<Location> originSupplier;
     protected final Vector offsetVector;
     protected EntityArmorStand entityArmorStand;
+    protected boolean enablePitch;
 
     public OffsetArmorStand(Supplier<Location> originSupplier, Vector offsetVector) {
         this.originSupplier = originSupplier;
         this.offsetVector = offsetVector;
+        this.enablePitch = false;
+    }
+
+    public OffsetArmorStand enablePitch() {
+        this.enablePitch = true;
+        return this;
     }
 
     @Override
@@ -45,9 +53,13 @@ public class OffsetArmorStand implements Runnable {
         final Vector tmpOffset = offsetVector.clone();
         VectorUtils.rotate2d(tmpOffset, degToRadians(-origin.getYaw()));
 
+        if (enablePitch) {
+            entityArmorStand.setHeadPose(new Vector3f(origin.getPitch(), 0, 0));
+        }
+
         entityArmorStand.setPositionRotation(
                 origin.getX() + tmpOffset.getX(),
-                origin.getY() + tmpOffset.getY() - 0.5,
+                origin.getY() + tmpOffset.getY() - 3.5,
                 origin.getZ() + tmpOffset.getZ(),
                 origin.getYaw(), 0
         );

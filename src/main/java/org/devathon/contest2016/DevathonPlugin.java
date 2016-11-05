@@ -8,6 +8,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import java.util.function.Supplier;
+
 public class DevathonPlugin extends JavaPlugin {
 
     @Override
@@ -20,7 +22,7 @@ public class DevathonPlugin extends JavaPlugin {
             }
             return true;
         });
-        getServer().getPluginManager().registerEvents(new GunListener(), this);
+        getServer().getPluginManager().registerEvents(new GunListener(this), this);
         // put your enable code here
     }
 
@@ -37,6 +39,8 @@ public class DevathonPlugin extends JavaPlugin {
         final ItemStack skinBlock = new ItemStack(Material.HARD_CLAY);
         final ItemStack energyBlock = new ItemStack(Material.DIAMOND_BLOCK);
         final ItemStack redWool = new ItemStack(Material.WOOL, 1, (short) 0xE);
+
+        final Supplier<Location> headAnchor = () -> player.getLocation().add(0, 3.5, 0);
 
         // left leg
         OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, -1, 0), blackWool);
@@ -77,28 +81,28 @@ public class DevathonPlugin extends JavaPlugin {
         OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 4, 1), ironBlock);
 
         // head layer 1 TODO
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 5, 0), skinBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 5, 0), skinBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 5, 0), skinBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 5, 1), skinBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 5, 1), skinBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 5, 1), skinBlock);
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, -1, -0.3), skinBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, -1, -0.3), skinBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, -1, -0.3), skinBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, -1, 0.7), skinBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, -1, 0.7), skinBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, -1, 0.7), skinBlock).enablePitch();
 
         // head layer 1 TODO
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 6, 0), skinBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 6, 0), skinBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 6, 0), skinBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 6, 1), skinBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 6, 1), skinBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 6, 1), skinBlock);
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, 0, -0.3), skinBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, 0, -0.3), skinBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, 0, -0.3), skinBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, 0, 0.7), skinBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, 0, 0.7), skinBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, 0, 0.7), skinBlock).enablePitch();
 
         // hat
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 7, 0), redWool);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 7, 0), redWool);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 7, 0), redWool);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 7, 1), redWool);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 7, 1), redWool);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 7, 1), redWool);
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, 1, -0.3), redWool).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, 1, -0.3), redWool).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, 1, -0.3), redWool).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, 1, 0.7), redWool).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, 1, 0.7), redWool).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, 1, 0.7), redWool).enablePitch();
 
         // energy source
         OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 1.5, -0.7), energyBlock);
