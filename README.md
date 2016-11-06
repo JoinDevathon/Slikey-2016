@@ -1,3 +1,9 @@
+Make yourself a terminator by using /terminator
+1. Itemslot + Left-click = Plasma / Laser gun
+2. Itemslot + Left-click = Explosion
+Shoot animals and monsters with your terminator and then ruin the planet!
+The terminator imitates the player's movement and head direction. It's creepy.
+
 # Devathon Project
 This is the base layout for your Devathon Project. It includes several scripts to make running incredibly easy on Windows, Mac, and Linux.
 

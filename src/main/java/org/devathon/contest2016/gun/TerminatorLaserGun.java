@@ -1,4 +1,4 @@
-package org.devathon.contest2016;
+package org.devathon.contest2016.gun;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -9,10 +9,14 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.devathon.contest2016.Terminator;
+import org.devathon.contest2016.VectorUtils;
 import org.devathon.contest2016.armorstand.ExEntityArmorStand;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static org.devathon.contest2016.VectorUtils.degToRadians;
 
 /**
  * @author kevin
@@ -26,7 +30,15 @@ public class TerminatorLaserGun {
         this.terminator = terminator;
     }
 
-    public ExEntityArmorStand spawnProjectile(Location loc) {
+    public void execute() {
+        final Location loc = terminator.getPlayer().getLocation().add(0, 3.5, 0);
+        final Vector tmpOffset = new Vector(1.4, 0, 0);
+        VectorUtils.rotateY(tmpOffset, degToRadians(-loc.getYaw()));
+        loc.add(tmpOffset);
+        spawnProjectile(loc);
+    }
+
+    private ExEntityArmorStand spawnProjectile(Location loc) {
         if (terminator.getEnergy() > 0) {
             terminator.setEnergy(terminator.getEnergy() - 1);
 
@@ -39,7 +51,7 @@ public class TerminatorLaserGun {
                 @Override
                 public void run() {
                     final ExEntityArmorStand eas = ref.get();
-                    final Location impact = loc.clone().add(dir.clone().multiply(i));
+                    final Location impact = loc.clone().add(dir.clone().multiply(i * 2));
                     eas.setPositionRotation(impact.getX(), impact.getY() - 1, impact.getZ(), impact.getYaw(), 0);
                     for (Entity entity : loc.getWorld().getNearbyEntities(impact, 1, 1, 1)) {
                         hitEntity(entity);
@@ -50,7 +62,7 @@ public class TerminatorLaserGun {
                 }
 
             });
-            eas.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 0);
+            eas.setPositionRotation(loc.getX(), loc.getY() - 1, loc.getZ(), loc.getYaw(), 0);
             eas.setInvisible(true);
             eas.setNoGravity(true);
             eas.setSmall(true);

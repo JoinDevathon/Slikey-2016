@@ -6,7 +6,7 @@ author: Slikey
 main: org.devathon.contest2016.DevathonPlugin
 
 commands:
-    blocky:
+    terminator:
         description: Set yourself on fire
         aliases: [combust_me, combustMe]
         permission: inferno.flagrate

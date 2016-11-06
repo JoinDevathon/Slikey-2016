@@ -33,11 +33,13 @@ public class OffsetArmorStand implements Runnable {
     protected final Vector offsetVector;
     protected EntityArmorStand entityArmorStand;
     protected boolean enablePitch;
+    protected float pitchOffset;
 
     public OffsetArmorStand(Supplier<Location> originSupplier, Vector offsetVector) {
         this.originSupplier = originSupplier;
         this.offsetVector = offsetVector;
         this.enablePitch = false;
+        this.pitchOffset = 0;
     }
 
     public OffsetArmorStand enablePitch() {
@@ -47,6 +49,15 @@ public class OffsetArmorStand implements Runnable {
 
     public OffsetArmorStand baby() {
         entityArmorStand.setSmall(true);
+        return this;
+    }
+
+    public float pitchOffset() {
+        return pitchOffset;
+    }
+
+    public OffsetArmorStand pitchOffset(float pitchOffset) {
+        this.pitchOffset = pitchOffset;
         return this;
     }
 
@@ -62,10 +73,9 @@ public class OffsetArmorStand implements Runnable {
     public void run() {
         final Location origin = originSupplier.get();
         Vector tmpOffset = offsetVector.clone();
-
         if (enablePitch) {
-            VectorUtils.rotateX(tmpOffset, degToRadians(-origin.getPitch()));
-            entityArmorStand.setHeadPose(new Vector3f(origin.getPitch(), 0, 0));
+            VectorUtils.rotateX(tmpOffset, degToRadians(-(origin.getPitch() + pitchOffset)));
+            entityArmorStand.setHeadPose(new Vector3f(origin.getPitch() + pitchOffset, 0, 0));
         }
         VectorUtils.rotateY(tmpOffset, degToRadians(-origin.getYaw()));
         entityArmorStand.setPositionRotation(

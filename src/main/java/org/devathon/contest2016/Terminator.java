@@ -6,15 +6,13 @@ import org.bukkit.craftbukkit.v1_10_R1.entity.CraftArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
-import org.bukkit.util.Vector;
 import org.devathon.contest2016.armorstand.OffsetArmorStand;
+import org.devathon.contest2016.gun.TerminatorEnergyExplosion;
+import org.devathon.contest2016.gun.TerminatorLaserGun;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static java.lang.Math.min;
-import static org.devathon.contest2016.VectorUtils.degToRadians;
 
 /**
  * @author kevin
@@ -24,10 +22,10 @@ public class Terminator implements Runnable {
 
     private final DevathonPlugin plugin;
     private final Player player;
+    private final TerminatorModel model;
     private final TerminatorLaserGun laserGun;
     private final TerminatorEnergyExplosion energyExplosion;
-    private final List<OffsetArmorStand> blocks;
-    private final List<OffsetArmorStand> energySource;
+    private Location previous;
     private BukkitTask bukkitTask;
     private long ticksLived;
     private int energy;
@@ -35,15 +33,11 @@ public class Terminator implements Runnable {
     public Terminator(DevathonPlugin plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
+        this.model = new TerminatorModel();
         laserGun = new TerminatorLaserGun(this);
         energyExplosion = new TerminatorEnergyExplosion(this);
-        blocks = new ArrayList<>();
-        energySource = new ArrayList<>();
+        previous = player.getLocation();
         ticksLived = 0;
-    }
-
-    public List<OffsetArmorStand> getEnergySource() {
-        return energySource;
     }
 
     public void spawn() {
@@ -53,11 +47,7 @@ public class Terminator implements Runnable {
 
     public void despawn() {
         bukkitTask.cancel();
-        for (OffsetArmorStand oas : blocks) {
-            oas.despawn();
-        }
-        blocks.clear();
-        energySource.clear();
+        model.destroy();
     }
 
     public Player getPlayer() {
@@ -73,21 +63,15 @@ public class Terminator implements Runnable {
     }
 
     public int getMaxEnergy() {
-        return energySource.size();
+        return model.getParts(TerminatorModel.TerminatorModelPart.ENERGY_SOURCE).size();
     }
 
-    public OffsetArmorStand block(Location location, Supplier<Location> originSupplier, Vector offsetVector, ItemStack itemStack) {
-        final OffsetArmorStand oas = OffsetArmorStand.spawn(location, originSupplier, offsetVector, itemStack);
-        blocks.add(oas);
-        return oas;
+    public TerminatorModel getModel() {
+        return model;
     }
 
     public void immaFirinMaLazor() {
-        final Location loc = player.getLocation().add(0, 3, 0);
-        final Vector tmpOffset = new Vector(1.75, 0, 0);
-        VectorUtils.rotateY(tmpOffset, degToRadians(-loc.getYaw()));
-        loc.add(tmpOffset);
-        laserGun.spawnProjectile(loc);
+        laserGun.execute();
     }
 
     public void energyExplosion() {
@@ -99,12 +83,42 @@ public class Terminator implements Runnable {
         if (ticksLived++ % (5 * 20) == 0) {
             energy = min(energy + 1, getMaxEnergy());
         }
+        final List<OffsetArmorStand> energySource = model.getParts(TerminatorModel.TerminatorModelPart.ENERGY_SOURCE);
         for (int i = 0; i < energySource.size(); i++) {
             OffsetArmorStand oas = energySource.get(i);
             if (energy > i) {
                 ((CraftArmorStand) oas.getEntityArmorStand().getBukkitEntity()).setHelmet(new ItemStack(Material.DIAMOND_BLOCK));
             } else {
                 ((CraftArmorStand) oas.getEntityArmorStand().getBukkitEntity()).setHelmet(new ItemStack(Material.COAL_BLOCK));
+            }
+        }
+
+        { // Leg movement
+            final double length = previous.distance(player.getLocation());
+            previous = player.getLocation();
+
+            final int ticks = 15; // ticks to move leg back and forth
+            final int direction = ticksLived % (ticks * 2) >= ticks ? 1 : -1;
+            float pitchChange = 60f / ticks;
+            for (OffsetArmorStand oas : model.getParts(TerminatorModel.TerminatorModelPart.LEFT_LEG)) {
+                float pitch = oas.pitchOffset();
+                pitch += pitchChange * 4 * length * direction;
+                if (pitch > 30) {
+                    pitch = 30;
+                } else if (pitch < -30) {
+                    pitch = -30;
+                }
+                oas.pitchOffset(pitch);
+            }
+            for (OffsetArmorStand oas : model.getParts(TerminatorModel.TerminatorModelPart.RIGHT_LEG)) {
+                float pitch = oas.pitchOffset();
+                pitch += pitchChange * 4 * length * -direction;
+                if (pitch > 30) {
+                    pitch = 30;
+                } else if (pitch < -30) {
+                    pitch = -30;
+                }
+                oas.pitchOffset(pitch);
             }
         }
     }

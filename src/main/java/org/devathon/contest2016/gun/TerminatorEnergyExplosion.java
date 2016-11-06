@@ -1,6 +1,7 @@
-package org.devathon.contest2016;
+package org.devathon.contest2016.gun;
 
 import org.bukkit.entity.Player;
+import org.devathon.contest2016.Terminator;
 
 /**
  * @author kevin

@@ -14,7 +14,7 @@ public class DevathonPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         terminators = new HashMap<>();
-        getCommand("blocky").setExecutor((sender, command, label, args) -> {
+        getCommand("terminator").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 if (!terminators.containsKey(player)) {
@@ -27,7 +27,6 @@ public class DevathonPlugin extends JavaPlugin {
             return true;
         });
         getServer().getPluginManager().registerEvents(new GunListener(this), this);
-        // put your enable code here
     }
 
     @Override
