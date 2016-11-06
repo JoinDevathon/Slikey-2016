@@ -1,7 +1,8 @@
 package org.devathon.contest2016;
 
 import net.minecraft.server.v1_10_R1.EntityArmorStand;
-import net.minecraft.server.v1_10_R1.World;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftArmorStand;
 
 /**
@@ -13,7 +14,7 @@ public class ExEntityArmorStand extends EntityArmorStand {
     private final Runnable runnable;
 
     public ExEntityArmorStand(World world, Runnable runnable) {
-        super(world);
+        super(((CraftWorld) world).getHandle());
         this.runnable = runnable;
         setInvisible(true);
         setNoGravity(true);

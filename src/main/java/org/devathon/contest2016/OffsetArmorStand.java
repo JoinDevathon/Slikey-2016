@@ -2,9 +2,7 @@ package org.devathon.contest2016;
 
 import net.minecraft.server.v1_10_R1.EntityArmorStand;
 import net.minecraft.server.v1_10_R1.Vector3f;
-import net.minecraft.server.v1_10_R1.World;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -21,9 +19,8 @@ public class OffsetArmorStand implements Runnable {
 
     public static OffsetArmorStand spawn(Location location, Supplier<Location> originSupplier, Vector offsetVector, ItemStack itemStack) {
         offsetVector.multiply(0.6);
-        final World world = ((CraftWorld) location.getWorld()).getHandle();
         final OffsetArmorStand offsetArmorStand = new OffsetArmorStand(originSupplier, offsetVector);
-        final ExEntityArmorStand entityArmorStand = new ExEntityArmorStand(world, offsetArmorStand);
+        final ExEntityArmorStand entityArmorStand = new ExEntityArmorStand(location.getWorld(), offsetArmorStand);
         entityArmorStand.setPosition(location.getX(), location.getY(), location.getZ());
         ((CraftArmorStand) entityArmorStand.getBukkitEntity()).setHelmet(itemStack);
         entityArmorStand.world.addEntity(entityArmorStand);
@@ -52,6 +49,10 @@ public class OffsetArmorStand implements Runnable {
         return this;
     }
 
+    public void despawn() {
+        entityArmorStand.world.removeEntity(entityArmorStand);
+    }
+
     @Override
     public void run() {
         final Location origin = originSupplier.get();
@@ -64,7 +65,7 @@ public class OffsetArmorStand implements Runnable {
         VectorUtils.rotateY(tmpOffset, degToRadians(-origin.getYaw()));
         entityArmorStand.setPositionRotation(
                 origin.getX() + tmpOffset.getX(),
-                origin.getY() + tmpOffset.getY() - 3.5,
+                origin.getY() + tmpOffset.getY() - 3,
                 origin.getZ() + tmpOffset.getZ(),
                 origin.getYaw(), 0
         );

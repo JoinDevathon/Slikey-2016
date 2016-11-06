@@ -1,24 +1,28 @@
 package org.devathon.contest2016;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
-import java.util.function.Supplier;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.devathon.contest2016.TerminatorSpawner.spawnTerminator;
 
 public class DevathonPlugin extends JavaPlugin {
 
+    private Map<Player, Terminator> terminators;
+
     @Override
     public void onEnable() {
+        terminators = new HashMap<>();
         getCommand("blocky").setExecutor((sender, command, label, args) -> {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(Integer.MAX_VALUE, 1));
-                spawnTerminator(player);
+                if (!terminators.containsKey(player)) {
+                    player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(Integer.MAX_VALUE, 1));
+                    terminators.put(player, spawnTerminator(player));
+                }
             }
             return true;
         });
@@ -28,105 +32,14 @@ public class DevathonPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // put your disable code here
+        for (Terminator terminator : terminators.values()) {
+            terminator.despawn();
+        }
+        terminators.clear();
     }
 
-    public void spawnTerminator(Player player) {
-        final Location loc = player.getLocation();
-
-        final ItemStack blackWool = new ItemStack(Material.WOOL, 1, (short) 0xF);
-        final ItemStack ironBlock = new ItemStack(Material.IRON_BLOCK);
-        final ItemStack skinBlock = new ItemStack(Material.HARD_CLAY);
-        final ItemStack energyBlock = new ItemStack(Material.DIAMOND_BLOCK);
-        final ItemStack redWool = new ItemStack(Material.WOOL, 1, (short) 0xE);
-        final ItemStack eyeBlock = new ItemStack(Material.DRAGON_EGG);
-
-        final Supplier<Location> headAnchor = () -> player.getLocation().add(0, 3.5, 0);
-        final Supplier<Location> armAnchor = () -> player.getLocation().add(0, 3, 0);
-
-        // left leg
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, -1, 0), blackWool);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, -1, 1), blackWool);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 0, 0), blackWool);
-
-        // right leg
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, -1, 0), blackWool);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, -1, 1), blackWool);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 0, 0), blackWool);
-
-        // body layer 1
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 1, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 1, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 1, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 1, 1), ironBlock);
-
-        // body layer 2
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 2, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 2, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 2, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 2, 1), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 2, 1), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 2, 1), ironBlock);
-
-        // body layer 3
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 3, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 3, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 3, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 3, 1), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 3, 1), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 3, 1), ironBlock);
-
-        // body layer 4
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, 4, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 4, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-1, 4, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 4, 1), ironBlock);
-
-        // head layer 1 TODO
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, -1, -0.3), skinBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, -1, -0.3), skinBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, -1, -0.3), skinBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, -1, 0.7), skinBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, -1, 0.7), skinBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, -1, 0.7), skinBlock).enablePitch();
-
-        // head layer 1 TODO
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, 0, -0.3), skinBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, 0, -0.3), skinBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, 0, -0.3), skinBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, 0, 0.7), skinBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, 0, 0.7), skinBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, 0, 0.7), skinBlock).enablePitch();
-
-        // eyes
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0.7, 0.25, 1), eyeBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-0.7, 0.25, 1), eyeBlock).enablePitch();
-
-        // hat
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, 1, -0.3), redWool).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, 1, -0.3), redWool).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, 1, -0.3), redWool).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, 1, 0.7), redWool).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, 1, 0.7), redWool).enablePitch();
-        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, 1, 0.7), redWool).enablePitch();
-
-        // energy source
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 1.5, -0.7), energyBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 2.3, -0.7), energyBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 3.1, -0.7), energyBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 3.8, -0.7), energyBlock);
-
-        // left arm
-        OffsetArmorStand.spawn(loc, armAnchor, new Vector(2, -1, 0), ironBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, armAnchor, new Vector(2.5, -1, 0), ironBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, armAnchor, new Vector(2.5, -1, 1), ironBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, armAnchor, new Vector(2.5, -1, 2), ironBlock).enablePitch();
-
-        // right arm
-        OffsetArmorStand.spawn(loc, armAnchor, new Vector(-2, -1, 0), ironBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, armAnchor, new Vector(-2.5, -1, 0), ironBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, armAnchor, new Vector(-2.5, -1, 1), ironBlock).enablePitch();
-        OffsetArmorStand.spawn(loc, armAnchor, new Vector(-2.5, -1, 2), ironBlock).enablePitch();
+    public Terminator getTerminator(Player player) {
+        return terminators.get(player);
     }
 
 }
