@@ -32,8 +32,8 @@ public class GunListener implements Listener {
     public void onLeftClick(PlayerInteractEvent event) {
         if (event.getAction() == Action.LEFT_CLICK_AIR) {
             final Location loc = event.getPlayer().getLocation();
-            final Vector tmpOffset = new Vector(1.75, 4, 1);
-            VectorUtils.rotate2d(tmpOffset, degToRadians(-loc.getYaw()));
+            final Vector tmpOffset = new Vector(1.75, 1, 1);
+            VectorUtils.rotateY(tmpOffset, degToRadians(-loc.getYaw()));
             loc.add(tmpOffset);
             final Vector dir = loc.getDirection();
             new BukkitRunnable() {

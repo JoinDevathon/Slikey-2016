@@ -47,16 +47,21 @@ public class OffsetArmorStand implements Runnable {
         return this;
     }
 
+    public OffsetArmorStand baby() {
+        entityArmorStand.setSmall(true);
+        return this;
+    }
+
     @Override
     public void run() {
         final Location origin = originSupplier.get();
-        final Vector tmpOffset = offsetVector.clone();
-        VectorUtils.rotate2d(tmpOffset, degToRadians(-origin.getYaw()));
+        Vector tmpOffset = offsetVector.clone();
 
         if (enablePitch) {
+            VectorUtils.rotateX(tmpOffset, degToRadians(-origin.getPitch()));
             entityArmorStand.setHeadPose(new Vector3f(origin.getPitch(), 0, 0));
         }
-
+        VectorUtils.rotateY(tmpOffset, degToRadians(-origin.getYaw()));
         entityArmorStand.setPositionRotation(
                 origin.getX() + tmpOffset.getX(),
                 origin.getY() + tmpOffset.getY() - 3.5,

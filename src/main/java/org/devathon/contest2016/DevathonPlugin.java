@@ -39,8 +39,10 @@ public class DevathonPlugin extends JavaPlugin {
         final ItemStack skinBlock = new ItemStack(Material.HARD_CLAY);
         final ItemStack energyBlock = new ItemStack(Material.DIAMOND_BLOCK);
         final ItemStack redWool = new ItemStack(Material.WOOL, 1, (short) 0xE);
+        final ItemStack eyeBlock = new ItemStack(Material.DRAGON_EGG);
 
         final Supplier<Location> headAnchor = () -> player.getLocation().add(0, 3.5, 0);
+        final Supplier<Location> armAnchor = () -> player.getLocation().add(0, 3, 0);
 
         // left leg
         OffsetArmorStand.spawn(loc, player::getLocation, new Vector(1, -1, 0), blackWool);
@@ -96,6 +98,10 @@ public class DevathonPlugin extends JavaPlugin {
         OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, 0, 0.7), skinBlock).enablePitch();
         OffsetArmorStand.spawn(loc, headAnchor, new Vector(-1, 0, 0.7), skinBlock).enablePitch();
 
+        // eyes
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(0.7, 0.25, 1), eyeBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, headAnchor, new Vector(-0.7, 0.25, 1), eyeBlock).enablePitch();
+
         // hat
         OffsetArmorStand.spawn(loc, headAnchor, new Vector(1, 1, -0.3), redWool).enablePitch();
         OffsetArmorStand.spawn(loc, headAnchor, new Vector(0, 1, -0.3), redWool).enablePitch();
@@ -111,16 +117,16 @@ public class DevathonPlugin extends JavaPlugin {
         OffsetArmorStand.spawn(loc, player::getLocation, new Vector(0, 3.8, -0.7), energyBlock);
 
         // left arm
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(2, 4, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(2.5, 4, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(2.5, 4, 1), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(2.5, 4, 2), ironBlock);
+        OffsetArmorStand.spawn(loc, armAnchor, new Vector(2, -1, 0), ironBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, armAnchor, new Vector(2.5, -1, 0), ironBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, armAnchor, new Vector(2.5, -1, 1), ironBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, armAnchor, new Vector(2.5, -1, 2), ironBlock).enablePitch();
 
         // right arm
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-2, 4, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-2.5, 4, 0), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-2.5, 4, 1), ironBlock);
-        OffsetArmorStand.spawn(loc, player::getLocation, new Vector(-2.5, 4, 2), ironBlock);
+        OffsetArmorStand.spawn(loc, armAnchor, new Vector(-2, -1, 0), ironBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, armAnchor, new Vector(-2.5, -1, 0), ironBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, armAnchor, new Vector(-2.5, -1, 1), ironBlock).enablePitch();
+        OffsetArmorStand.spawn(loc, armAnchor, new Vector(-2.5, -1, 2), ironBlock).enablePitch();
     }
 
 }
