@@ -1,5 +1,6 @@
 package org.devathon.contest2016;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -19,10 +20,15 @@ public class GunListener implements Listener {
 
     @EventHandler
     public void onLeftClick(PlayerInteractEvent event) {
-        if (event.getAction() == Action.LEFT_CLICK_AIR) {
+        if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             final Terminator terminator = plugin.getTerminator(event.getPlayer());
             if (terminator != null) {
-                terminator.immaFirinMaLazor();
+                final Player player = event.getPlayer();
+                if (player.getInventory().getHeldItemSlot() == 0) {
+                    terminator.immaFirinMaLazor();
+                } else if (player.getInventory().getHeldItemSlot() == 1) {
+                    terminator.energyExplosion();
+                }
             }
         }
     }

@@ -1,4 +1,4 @@
-package org.devathon.contest2016;
+package org.devathon.contest2016.armorstand;
 
 import net.minecraft.server.v1_10_R1.EntityArmorStand;
 import org.bukkit.World;

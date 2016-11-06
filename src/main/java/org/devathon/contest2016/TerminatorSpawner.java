@@ -15,16 +15,11 @@ import java.util.function.Supplier;
  */
 public class TerminatorSpawner {
 
-    public static Terminator spawnTerminator(Player player) {
-        final Terminator terminator = new Terminator();
-
+    public static Terminator spawnTerminator(Player player, Terminator terminator) {
         final Location loc = player.getLocation();
 
         final ItemStack blackWool = new ItemStack(Material.WOOL, 1, (short) 0xF);
         final ItemStack ironBlock = new ItemStack(Material.IRON_BLOCK);
-        final ItemStack energyBlock = new ItemStack(Material.DIAMOND_BLOCK);
-
-        final Supplier<Location> armAnchor = () -> player.getLocation().add(0, 3, 0);
 
         // left leg
         terminator.block(loc, player::getLocation, new Vector(1, -1, 0), blackWool);
@@ -38,9 +33,7 @@ public class TerminatorSpawner {
 
         // body layer 1
         terminator.block(loc, player::getLocation, new Vector(1, 1, 0), ironBlock);
-        terminator.block(loc, player::getLocation, new Vector(0, 1, 0), ironBlock);
         terminator.block(loc, player::getLocation, new Vector(-1, 1, 0), ironBlock);
-        terminator.block(loc, player::getLocation, new Vector(0, 1, 1), ironBlock);
 
         // body layer 2
         terminator.block(loc, player::getLocation, new Vector(1, 2, 0), ironBlock);
@@ -64,27 +57,9 @@ public class TerminatorSpawner {
         terminator.block(loc, player::getLocation, new Vector(-1, 4, 0), ironBlock);
         terminator.block(loc, player::getLocation, new Vector(0, 4, 1), ironBlock);
 
-        // energy source
-        terminator.getEnergySource().addAll(Arrays.asList(
-                terminator.block(loc, player::getLocation, new Vector(0, 1.5, -0.7), energyBlock),
-                terminator.block(loc, player::getLocation, new Vector(0, 2.3, -0.7), energyBlock),
-                terminator.block(loc, player::getLocation, new Vector(0, 3.1, -0.7), energyBlock),
-                terminator.block(loc, player::getLocation, new Vector(0, 3.8, -0.7), energyBlock)
-        ));
-
+        spawnEnergySource(terminator, player);
         spawnHead(terminator, player);
-
-        // left arm
-        terminator.block(loc, armAnchor, new Vector(2, -1, 0), ironBlock).enablePitch();
-        terminator.block(loc, armAnchor, new Vector(2.5, -1, 0), ironBlock).enablePitch();
-        terminator.block(loc, armAnchor, new Vector(2.5, -1, 1), ironBlock).enablePitch();
-        terminator.block(loc, armAnchor, new Vector(2.5, -1, 2), ironBlock).enablePitch();
-
-        // right arm
-        terminator.block(loc, armAnchor, new Vector(-2, -1, 0), ironBlock).enablePitch();
-        terminator.block(loc, armAnchor, new Vector(-2.5, -1, 0), ironBlock).enablePitch();
-        terminator.block(loc, armAnchor, new Vector(-2.5, -1, 1), ironBlock).enablePitch();
-        terminator.block(loc, armAnchor, new Vector(-2.5, -1, 2), ironBlock).enablePitch();
+        spawnArms(terminator, player);
 
         return terminator;
     }
@@ -125,6 +100,39 @@ public class TerminatorSpawner {
         terminator.block(loc, headAnchor, new Vector(1, 1, 0.7), redWool).enablePitch();
         terminator.block(loc, headAnchor, new Vector(0, 1, 0.7), redWool).enablePitch();
         terminator.block(loc, headAnchor, new Vector(-1, 1, 0.7), redWool).enablePitch();
+    }
+
+    private static void spawnArms(Terminator terminator, Player player) {
+        final Location loc = player.getLocation();
+
+        final Supplier<Location> armAnchor = () -> player.getLocation().add(0, 3, 0);
+
+        final ItemStack ironBlock = new ItemStack(Material.IRON_BLOCK);
+
+        // left arm
+        terminator.block(loc, armAnchor, new Vector(2, -1, 0), ironBlock).enablePitch();
+        terminator.block(loc, armAnchor, new Vector(2.5, -1, 0), ironBlock).enablePitch();
+        terminator.block(loc, armAnchor, new Vector(2.5, -1, 1), ironBlock).enablePitch();
+        terminator.block(loc, armAnchor, new Vector(2.5, -1, 2), ironBlock).enablePitch();
+
+        // right arm
+        terminator.block(loc, armAnchor, new Vector(-2, -1, 0), ironBlock).enablePitch();
+        terminator.block(loc, armAnchor, new Vector(-2.5, -1, 0), ironBlock).enablePitch();
+        terminator.block(loc, armAnchor, new Vector(-2.5, -1, 1), ironBlock).enablePitch();
+        terminator.block(loc, armAnchor, new Vector(-2.5, -1, 2), ironBlock).enablePitch();
+    }
+
+    private static void spawnEnergySource(Terminator terminator, Player player) {
+        final Location loc = player.getLocation();
+        final ItemStack energyBlock = new ItemStack(Material.COAL_BLOCK);
+
+        // energy source
+        terminator.getEnergySource().addAll(Arrays.asList(
+                terminator.block(loc, player::getLocation, new Vector(0, 1.5, -0.7), energyBlock),
+                terminator.block(loc, player::getLocation, new Vector(0, 2.3, -0.7), energyBlock),
+                terminator.block(loc, player::getLocation, new Vector(0, 3.1, -0.7), energyBlock),
+                terminator.block(loc, player::getLocation, new Vector(0, 3.8, -0.7), energyBlock)
+        ));
     }
 
 }

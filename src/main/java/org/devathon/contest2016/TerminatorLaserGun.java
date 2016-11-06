@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.devathon.contest2016.armorstand.ExEntityArmorStand;
 
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;

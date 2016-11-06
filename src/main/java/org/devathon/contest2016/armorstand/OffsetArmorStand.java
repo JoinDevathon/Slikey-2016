@@ -1,4 +1,4 @@
-package org.devathon.contest2016;
+package org.devathon.contest2016.armorstand;
 
 import net.minecraft.server.v1_10_R1.EntityArmorStand;
 import net.minecraft.server.v1_10_R1.Vector3f;
@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import org.devathon.contest2016.VectorUtils;
 
 import java.util.function.Supplier;
 
@@ -49,6 +50,10 @@ public class OffsetArmorStand implements Runnable {
         return this;
     }
 
+    public EntityArmorStand getEntityArmorStand() {
+        return entityArmorStand;
+    }
+
     public void despawn() {
         entityArmorStand.world.removeEntity(entityArmorStand);
     }
@@ -65,7 +70,7 @@ public class OffsetArmorStand implements Runnable {
         VectorUtils.rotateY(tmpOffset, degToRadians(-origin.getYaw()));
         entityArmorStand.setPositionRotation(
                 origin.getX() + tmpOffset.getX(),
-                origin.getY() + tmpOffset.getY() - 3,
+                origin.getY() + tmpOffset.getY() - 0.75,
                 origin.getZ() + tmpOffset.getZ(),
                 origin.getYaw(), 0
         );

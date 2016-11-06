@@ -7,8 +7,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.devathon.contest2016.TerminatorSpawner.spawnTerminator;
-
 public class DevathonPlugin extends JavaPlugin {
 
     private Map<Player, Terminator> terminators;
@@ -21,7 +19,9 @@ public class DevathonPlugin extends JavaPlugin {
                 Player player = (Player) sender;
                 if (!terminators.containsKey(player)) {
                     player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(Integer.MAX_VALUE, 1));
-                    terminators.put(player, spawnTerminator(player));
+                    Terminator terminator = new Terminator(this, player);
+                    terminator.spawn();
+                    terminators.put(player, terminator);
                 }
             }
             return true;
